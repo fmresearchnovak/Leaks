@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:key="pref_cb_log_onoff"
+        android:title="Show Log" />
+
+    <EditTextPreference
+        android:defaultValue="155.68.60.155"
+        android:inputType="number"
+        android:digits="1234567890."
+        android:key="pref_et_ip"
+        android:title="Destination Hostname / IP Address" />
+
+    <EditTextPreference
+        android:defaultValue="10000"
+        android:key="pref_et_port"
+        android:numeric="integer"
+        android:title="Destination Port Number" />
+
+</PreferenceScreen>
