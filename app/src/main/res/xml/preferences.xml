@@ -8,7 +8,7 @@
 
     <EditTextPreference
         android:defaultValue="155.68.60.155"
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:digits="1234567890."
         android:key="pref_et_ip"
         android:title="Destination Hostname / IP Address" />
@@ -16,7 +16,8 @@
     <EditTextPreference
         android:defaultValue="10000"
         android:key="pref_et_port"
-        android:numeric="integer"
+        android:inputType="numberDecimal"
+        android:digits="0123456789"
         android:title="Destination Port Number" />
 
 </PreferenceScreen>

