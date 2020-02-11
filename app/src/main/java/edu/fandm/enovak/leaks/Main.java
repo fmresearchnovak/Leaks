@@ -37,6 +37,7 @@ import java.util.Calendar;
 public class Main extends AppCompatActivity {
     private final static String TAG = Main.class.getName();
 
+    private TelephonyManager telephonyManager;
     private LocationManager locationManager;
     private LocationListener locationListener;
     private final static int MY_PERMISSIONS_REQUEST = 1;
@@ -48,6 +49,9 @@ public class Main extends AppCompatActivity {
     private String host;
     private Integer port;
 
+    private String imeiNumber;
+    private String phoneNumber;
+
     private ToggleButton tb;
 
     @Override
@@ -56,6 +60,23 @@ public class Main extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+
+
+        ///PHYO
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED)
+                && (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) != PackageManager.PERMISSION_GRANTED))
+        {
+            Toast.makeText(this, "Location and Phone state permissions required!", Toast.LENGTH_SHORT).show();
+            //request the permission
+            Log.d(TAG, "Requesting permissions!");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.INTERNET,
+                    Manifest.permission.READ_PHONE_STATE, Manifest.permission.READ_PHONE_NUMBERS},
+                    MY_PERMISSIONS_REQUEST);
+        }
+
+        telephonyManager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE); ///PHYO
 
         TextView tv = (TextView)findViewById(R.id.main_tv_log);
         tv.setMovementMethod(new ScrollingMovementMethod());
@@ -136,6 +157,16 @@ public class Main extends AppCompatActivity {
             stopLocationUpdates();
         }
 
+
+        ///PHYO
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
+        {
+            startLocationUpdates();
+        }
+        else {
+            stopLocationUpdates();
+        }
+
     }
 
 
@@ -159,6 +190,23 @@ public class Main extends AppCompatActivity {
 
     }
 
+    ///PHYO
+    public void leakPhoneNo(View v){
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_NUMBERS) == PackageManager.PERMISSION_GRANTED) {
+            phoneNumber = telephonyManager.getLine1Number();
+        }
+
+        if(phoneNumber == null){
+            phoneNumber = "555-1234";
+        }
+
+        prependToLog("Leaked Phone Number: " + phoneNumber);
+
+        ServerLeakTask slt = new ServerLeakTask();
+        slt.execute(phoneNumber);
+    }
+
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
@@ -172,9 +220,11 @@ public class Main extends AppCompatActivity {
                     }
                 }
 
+                /*
                 if(flag){
                     Toast.makeText(this, "Some leaks may not be possible.", Toast.LENGTH_SHORT).show();
                 }
+                */
                 return;
             }
         }
@@ -238,7 +288,7 @@ public class Main extends AppCompatActivity {
 
             if(success){
                 Log.d(TAG, "Leaking turned on!!");
-                tb.setChecked(true);
+                //tb.setChecked(true); ///PHYO
 
                 Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (lastKnownLocation != null) {
@@ -260,7 +310,7 @@ public class Main extends AppCompatActivity {
 
     public void stopLocationUpdates(){
         locationManager.removeUpdates(locationListener);
-        tb.setChecked(false);
+        //tb.setChecked(false); ///PHYO
     }
 
     public void leakLoc(Location loc){
