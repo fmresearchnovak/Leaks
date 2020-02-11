@@ -77,7 +77,7 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <ToggleButton
+        <ToggleButton android:id="@+id/main_tb_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
@@ -85,6 +85,37 @@
             android:textOff="Start"
             android:textOn="Stop"
             android:onClick="startStopGPS"/>
+
+    </LinearLayout>
+
+    <LinearLayout android:id="@+id/main_ll_row3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/main_ll_row2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="18sp"
+            android:textColor="#000000"
+            android:layout_margin="10dp"
+            android:text="IMEI Leaking"/>
+
+        <!-- This makes the Toggle Button right aligned" -->
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_margin="10dp"
+            android:text="Leak"
+            android:onClick="leakIMEI"/>
 
     </LinearLayout>
 
@@ -96,7 +127,7 @@
         android:text="Log"
         android:textSize="38sp"
         android:textColor="#000000"
-        app:layout_constraintTop_toBottomOf="@id/main_ll_row2"/>
+        app:layout_constraintTop_toBottomOf="@id/main_ll_row3"/>
 
 
     <TextView android:id="@+id/main_tv_log"

