@@ -15,7 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SettingsAct"></activity>
+        <activity android:name=".SimpleLeak"></activity>
+        <activity android:name=".SettingsAct" />
         <activity android:name=".SettingsFrag" />
         <activity android:name=".Main">
             <intent-filter>

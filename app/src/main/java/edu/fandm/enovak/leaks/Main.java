@@ -123,6 +123,12 @@ public class Main extends AppCompatActivity {
                 startActivity(i);
                 break;
 
+
+            case R.id.main_menu_simple_test:
+                i = new Intent(this, SimpleLeak.class);
+                startActivity(i);
+                break;
+
         }
         return true;
     }
