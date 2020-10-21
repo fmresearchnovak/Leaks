@@ -31,6 +31,8 @@ public class SimpleLeak extends AppCompatActivity {
 
         Log.d(TAG, "" + getData(15));
 
+        TooManyRegisters(5, 432341234, 16.78);
+
     }
 
 
@@ -85,6 +87,30 @@ public class SimpleLeak extends AppCompatActivity {
         };
 
         t.start();
+    }
+
+    public void TooManyRegisters(int a, long b, double c){
+        int d = 6;
+        int e = 7;
+        int f = 8;
+        int g = 9;
+        int h = 10;
+        int i = 11;
+        int j = 12;
+        int k = 13;
+        int l = 14;
+        int m = 15;
+        int n = 16;
+        int o = 17;
+
+
+        Log.d(TAG, "a: " +  a + "  b: " + b + "  c: " + c);
+        Log.d(TAG, "d: " +  d + "  e: " + e + "  f: " + f);
+        Log.d(TAG, "g: " +  g + "  h: " + h + "  i: " + i);
+        Log.d(TAG, "j: " +  j + "  k: " + k + "  l: " + l);
+        Log.d(TAG, "m: " +  m + "  n: " + n + "  o: " + o);
+
+
     }
 }
 
