@@ -32,12 +32,34 @@ public class SimpleLeak extends AppCompatActivity {
         Log.d(TAG, "" + getData(15));
 
         TooManyRegisters(5, 432341234, 16.78);
+        testTryCatch();
+
+        experiment7();
 
     }
 
+    private void experiment7(){
+
+        Log.d(TAG, "output: ");
+    }
 
     private int getData(int x){
         return 56 + x;
+    }
+
+    private void testTryCatch(){
+        int numerator = 15;
+        int denominator = 0;
+
+        int ans = 0;
+        try {
+            ans = numerator / denominator;
+        } catch (ArithmeticException ae){
+            ans = 2;
+        }
+
+        Log.d(TAG, "division answer: " + ans);
+
     }
 
     public void IMEI_LEAK(View v){

