@@ -12,12 +12,12 @@
         android:allowBackup="true"
         android:icon="@drawable/leek"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/leek"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".SimpleLeak"></activity>
         <activity android:name=".SettingsAct" />
-        <activity android:name=".SettingsFrag" />
+        <!-- <activity android:name=".SettingsFrag" /> -->
         <activity android:name=".Main">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

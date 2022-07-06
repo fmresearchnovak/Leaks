@@ -84,6 +84,7 @@ public class Main extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, PERMS, MY_PERMISSIONS_REQUEST);
 
         tb = (ToggleButton)findViewById(R.id.main_tb_location);
+
     }
 
     @Override
@@ -318,7 +319,9 @@ public class Main extends AppCompatActivity {
     }
 
     public void stopLocationUpdates(){
-        locationManager.removeUpdates(locationListener);
+        if(locationListener != null && locationManager != null) {
+            locationManager.removeUpdates(locationListener);
+        }
         //tb.setChecked(false); ///PHYO
     }
 
