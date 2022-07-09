@@ -28,6 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -251,6 +255,21 @@ public class Main extends AppCompatActivity {
                 // Called when a new location is found by the network location provider.
                 Log.d(TAG, "Location Changed: " + location);
                 leakLoc(location);
+
+                // Eventually I want stigma to automatically generate and insert
+                // the following code (but in smali of course)
+                // https://www.javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/index.html
+                // https://www.geeksforgeeks.org/convert-java-object-to-json-string-using-jackson-api/
+                ObjectMapper obj_mapper = new ObjectMapper();
+
+                // https://www.javadoc.io/static/com.fasterxml.jackson.core/jackson-databind/2.13.3/com/fasterxml/jackson/databind/SerializationFeature.html
+                obj_mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                try{
+                    String s = obj_mapper.writeValueAsString(location);
+                    Log.d(TAG, "onLocationChanged location as JSON:" + s);
+                } catch (JsonProcessingException jpe){
+                    jpe.printStackTrace();
+                }
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {

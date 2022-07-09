@@ -27,4 +27,8 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
     implementation 'com.android.support:preference-v7:+'
+
+    // https://github.com/FasterXML/jackson
+    // At the time this was the newest stable version: https://github.com/FasterXML/jackson/wiki/Jackson-Release-2.13
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 }
