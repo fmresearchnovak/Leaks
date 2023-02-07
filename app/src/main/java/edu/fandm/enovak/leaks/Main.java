@@ -28,6 +28,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
@@ -179,6 +183,30 @@ public class Main extends AppCompatActivity {
 
     public void leakPasswd(View v){
         EditText et = (EditText)findViewById(R.id.main_et_passwd);
+
+
+
+        // jackson stuff start
+        Vegetable v1 = new Vegetable("potato", 0.5);
+        ObjectMapper obj_mapper = new ObjectMapper();
+        obj_mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+        try{
+            String jsonStr = obj_mapper.writeValueAsString(v1);
+            Log.d(TAG, "vegetable as JSON: " + jsonStr);
+
+            v1.color = "Brown";
+            jsonStr = obj_mapper.writeValueAsString(v1);
+            Log.d(TAG, "vegetable as JSON: " + jsonStr);
+
+            jsonStr = obj_mapper.writeValueAsString(v);
+            Log.d(TAG, "v as JSON: " + jsonStr);
+
+        } catch (JsonProcessingException jpe){
+            jpe.printStackTrace();
+        } catch (IOException ioe){
+            ioe.printStackTrace();
+        }
+
         String pass = et.getText().toString();
 
         prependToLog("Leaked Password: " + pass);
@@ -251,6 +279,19 @@ public class Main extends AppCompatActivity {
                 // Called when a new location is found by the network location provider.
                 Log.d(TAG, "Location Changed: " + location);
                 leakLoc(location);
+
+                // jackson stuff start
+                ObjectMapper obj_mapper = new ObjectMapper();
+                obj_mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                try{
+                    String jsonStr = obj_mapper.writeValueAsString(location);
+                    Log.d(TAG, "onLocationChanged as JSON: " + jsonStr);
+
+                } catch (JsonProcessingException jpe){
+                    jpe.printStackTrace();
+                } catch (IOException ioe){
+                    ioe.printStackTrace();
+                }
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -303,6 +344,20 @@ public class Main extends AppCompatActivity {
                 Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                 if (lastKnownLocation != null) {
                     leakLoc(lastKnownLocation);
+
+                    ObjectMapper obj_mapper = new ObjectMapper();
+                    obj_mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
+                    try{
+                        String jsonStr = obj_mapper.writeValueAsString(lastKnownLocation);
+                        Log.d(TAG, "lastKnownLocation as JSON: " + jsonStr);
+
+                    } catch (JsonProcessingException jpe){
+                        jpe.printStackTrace();
+                    } catch (IOException ioe){
+                        ioe.printStackTrace();
+                    }
+
+
                 }
 
             } else {
