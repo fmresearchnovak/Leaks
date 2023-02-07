@@ -280,17 +280,20 @@ public class Main extends AppCompatActivity {
                 Log.d(TAG, "Location Changed: " + location);
                 leakLoc(location);
 
-                // jackson stuff start
+
+                // Eventually I want stigma to automatically generate and insert
+                // the following code (but in smali of course)
+                // https://www.javadoc.io/doc/com.fasterxml.jackson.core/jackson-databind/latest/index.html
+                // https://www.geeksforgeeks.org/convert-java-object-to-json-string-using-jackson-api/
                 ObjectMapper obj_mapper = new ObjectMapper();
+
+                // https://www.javadoc.io/static/com.fasterxml.jackson.core/jackson-databind/2.13.3/com/fasterxml/jackson/databind/SerializationFeature.html
                 obj_mapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
                 try{
-                    String jsonStr = obj_mapper.writeValueAsString(location);
-                    Log.d(TAG, "onLocationChanged as JSON: " + jsonStr);
-
+                    String s = obj_mapper.writeValueAsString(location);
+                    Log.d(TAG, "onLocationChanged location as JSON:" + s);
                 } catch (JsonProcessingException jpe){
                     jpe.printStackTrace();
-                } catch (IOException ioe){
-                    ioe.printStackTrace();
                 }
             }
 

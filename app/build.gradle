@@ -28,6 +28,8 @@ dependencies {
 
     implementation 'com.android.support:preference-v7:+'
 
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.13.3'
+
+    // https://github.com/FasterXML/jackson
+    // At the time this was the newest stable version: https://github.com/FasterXML/jackson/wiki/Jackson-Release-2.13
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.3'
 }
