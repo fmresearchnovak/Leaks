@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 public class UserLoginActivity extends AppCompatActivity {
 
@@ -66,6 +69,8 @@ public class UserLoginActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             FirebaseUser user = fbAuth.getCurrentUser();
                             Toast.makeText(getApplicationContext(), "Login Successful!", Toast.LENGTH_LONG).show();
+                            TextView tv = (TextView) findViewById(R.id.fb_login_uid_tv);
+                            tv.setText("Login Successful!\nUID: " + user.getUid());
                         } else {
                             Toast.makeText(getApplicationContext(), "Failed to login :(", Toast.LENGTH_SHORT).show();
                         }
