@@ -1,9 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".UserLoginActivity">
 
-</android.support.constraint.ConstraintLayout>
+
+    <LinearLayout
+        android:id="@+id/fb_login_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Firebase Login"
+            android:textColor="@color/black"
+            android:textSize="28sp"
+            android:textAlignment="center"
+            android:layout_marginTop="20dp" />
+
+        <ImageView
+            android:id="@+id/fb_login_iv"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:src="@drawable/login_24" />
+
+        <EditText
+            android:id="@+id/fb_email_et"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="email"
+            android:layout_marginTop="50dp"
+            android:textAlignment="center"/>
+
+        <EditText
+            android:id="@+id/fb_password_et"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:hint="password"
+            android:inputType="textPassword"
+            android:textAlignment="center"/>
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="20dp" />
+
+    </LinearLayout>
+
+
+    <Button
+        android:id="@+id/fb_login_reg_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Register"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintRight_toLeftOf="@id/fb_login_login_button"
+        app:layout_constraintTop_toBottomOf="@id/fb_login_ll" />
+
+    <Button
+        android:id="@+id/fb_login_login_button"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="Login"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintLeft_toRightOf="@id/fb_login_reg_button"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fb_login_ll" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

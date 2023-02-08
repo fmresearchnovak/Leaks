@@ -10,12 +10,11 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.ShareActionProvider;
+import androidx.appcompat.widget.ShareActionProvider;
 import android.telephony.TelephonyManager;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -134,6 +133,11 @@ public class Main extends AppCompatActivity {
                 startActivity(i);
                 break;
 
+            case R.id.main_menu_login:
+                i = new Intent(this, UserLoginActivity.class);
+                startActivity(i);
+                break;
+
         }
         return true;
     }
@@ -203,8 +207,6 @@ public class Main extends AppCompatActivity {
 
         } catch (JsonProcessingException jpe){
             jpe.printStackTrace();
-        } catch (IOException ioe){
-            ioe.printStackTrace();
         }
 
         String pass = et.getText().toString();
@@ -356,8 +358,6 @@ public class Main extends AppCompatActivity {
 
                     } catch (JsonProcessingException jpe){
                         jpe.printStackTrace();
-                    } catch (IOException ioe){
-                        ioe.printStackTrace();
                     }
 
 
