@@ -26,6 +26,7 @@ public class UserLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
 
+
         FirebaseAuth fbAuth = FirebaseAuth.getInstance();
 
         Button reg = (Button) findViewById(R.id.fb_login_reg_button);

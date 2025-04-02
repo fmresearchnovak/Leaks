@@ -21,9 +21,12 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".SimpleLeak" />
-        <activity android:name=".SettingsAct" /> <!-- <activity android:name=".SettingsFrag" /> -->
-        <activity android:name=".Main">
+        <activity android:name=".SimpleLeak"
+            android:exported="false"/>
+        <activity android:name=".SettingsAct"
+            android:exported="false"/> <!-- <activity android:name=".SettingsFrag" /> -->
+        <activity android:name=".Main"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
